@@ -3,6 +3,8 @@ pipeline {
 
     environment {
         DOCKER_IMAGE = 'diabetes-prediction:latest'
+        DOCKER_CLIENT_TIMEOUT = '300'
+        COMPOSE_HTTP_TIMEOUT = '300'
     }
 
     triggers {
@@ -19,7 +21,9 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    bat "docker build -t ${DOCKER_IMAGE} ."
+                    withEnv(["DOCKER_CLIENT_TIMEOUT=${DOCKER_CLIENT_TIMEOUT}", "COMPOSE_HTTP_TIMEOUT=${COMPOSE_HTTP_TIMEOUT}"]) {
+                        docker.build("${DOCKER_IMAGE}")
+                    }
                 }
             }
         }
@@ -27,7 +31,7 @@ pipeline {
         stage('Run Container') {
             steps {
                 script {
-                    bat "docker run -d -p 5000:5000 ${DOCKER_IMAGE}"
+                    bat 'docker run -d -p 5000:5000 diabetes-prediction'
                 }
             }
         }
