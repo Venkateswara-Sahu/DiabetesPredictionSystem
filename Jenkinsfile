@@ -12,7 +12,7 @@ pipeline {
     stages {
         stage('Clone Repo') {
             steps {
-                git 'https://github.com/Venkateswara-Sahu/DiabetesPrediction.git'
+                git 'https://github.com/Venkateswara-Sahu/DiabetesPredictionSystem.git'
             }
         }
 
