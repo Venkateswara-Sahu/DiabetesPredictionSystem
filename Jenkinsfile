@@ -19,7 +19,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build("${DOCKER_IMAGE}")
+                    bat "docker build -t ${DOCKER_IMAGE} ."
                 }
             }
         }
@@ -27,7 +27,7 @@ pipeline {
         stage('Run Container') {
             steps {
                 script {
-                    sh "docker run --rm -p 5000:5000 ${DOCKER_IMAGE}"
+                    bat "docker run -d -p 5000:5000 ${DOCKER_IMAGE}"
                 }
             }
         }
