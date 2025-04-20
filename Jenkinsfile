@@ -40,12 +40,12 @@ pipeline {
     post {
         success {
             mail to: 'venkateswarsahu000@gmail.com',
-                 subject: "✅ Build Success - #${env.BUILD_NUMBER}",
+                 subject: "✅ Build was a Success - #${env.BUILD_NUMBER}",
                  body: "Diabetes Prediction pipeline ran successfully!"
         }
         failure {
             mail to: 'venkateswarsahu000@gmail.com',
-                 subject: "❌ Build Failed - #${env.BUILD_NUMBER}",
+                 subject: "❌ Build has Failed - #${env.BUILD_NUMBER}",
                  body: "Pipeline failed. Please check Jenkins logs."
         }
     }
