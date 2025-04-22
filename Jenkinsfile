@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = 'diabetes-prediction:latest'
+        DOCKER_IMAGE = 'riverstead/diabetes-prediction:latest'
         DOCKER_CLIENT_TIMEOUT = '300'
         COMPOSE_HTTP_TIMEOUT = '300'
     }
@@ -28,10 +28,24 @@ pipeline {
             }
         }
 
+        stage('Push to Docker Hub') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                        bat """
+                            echo Logging in to Docker Hub...
+                            docker login -u %DOCKER_USER% -p %DOCKER_PASS%
+                            docker push ${DOCKER_IMAGE}
+                        """
+                    }
+                }
+            }
+        }
+
         stage('Run Container') {
             steps {
                 script {
-                    bat 'docker run -d -p 5000:5000 diabetes-prediction'
+                    bat "docker run -d -p 5000:5000 ${DOCKER_IMAGE}"
                 }
             }
         }
